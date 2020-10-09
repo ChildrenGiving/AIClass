@@ -1,0 +1,96 @@
+<html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/knn-classifier"></script>
+	<style>
+	.button {
+		background-color: red; 
+		border: none;
+		border-radius: 25px;
+    
+		color: white;
+			padding: 10px 30px;
+			text-align: center;
+  
+		text-decoration: none;
+			display: inline-block;
+			font-size: 16px;
+			
+
+	}
+	</style>
+  </head>
+  <body style="background-color:white;">
+	<center>
+	<a href="https://www.childrengiving.org">
+	<img src="https://i.imgur.com/2zKOivP.png" align="left" alt="ChildrenGiving Logo" width="9%" height="11%">
+	</a> </br> </br> </br> </br>
+	<h1 style="color:dimgray;">Welcome to the ChildrenGiving.org AI Simulation!</h1>
+	<h2></h2>
+	<h2 style="color:gray;">• To start, allow program camera access by clicking "Allow" when popup appears.</h2>
+	<h2 style="color:gray;">• To help the computer "learn", hold up at least 10 printed pictures of individual dogs, click on "Add Image of Dog" as you show each picture.</h2>
+	<h2 style="color:gray;">• Hold up at least 10 printed pictures of individual cats, click on "Add Image of Cat" as you show each picture.</h2>
+	<h2 style="color:gray;">• Hold up at least 10 printed pictures of miscellaneous items (like a house, person, or book), click on "Add Image of Neither" as you show each picture.</h2>
+    <div id="console"></div>
+    <video autoplay playsinline muted id="webcam" width="224" height="224"></video>
+    <script>
+      const webcamElement = document.getElementById('webcam');
+      let net;
+      const classifier = knnClassifier.create();
+
+      async function app() {
+
+        console.log('Loading mobilenet..');
+
+        net = await mobilenet.load();
+        console.log('Successfully loaded model');
+
+        const webcam = await tf.data.webcam(webcamElement);
+
+        const addExample = async classId => {
+
+          const img = await webcam.capture();
+
+          const activation = net.infer(img, true);
+
+          classifier.addExample(activation, classId);
+
+          img.dispose();
+        };
+
+        document.getElementById('dogs').addEventListener('click', () => addExample(0));
+        document.getElementById('neither').addEventListener('click', () => addExample(1));
+        document.getElementById('cats').addEventListener('click', () => addExample(2));
+
+        while (true) {
+          if (classifier.getNumClasses() > 0) {
+            const img = await webcam.capture();
+
+            const activation = net.infer(img, 'conv_preds');
+
+            const result = await classifier.predictClass(activation);
+
+            const classes = ['Dog', 'Neither', 'Cat'];
+            document.getElementById('console').innerText = `
+              prediction: ${classes[result.label]}\n
+              probability: ${result.confidences[result.label]}
+            `;
+
+            img.dispose();
+          }
+
+          await tf.nextFrame();
+        }
+      }
+
+      app();
+    </script>
+	</br> </br>
+	<button class="button" id="dogs">Add Image of Dog</button>
+    <button class="button" id="neither">Add Image of Neither</button>
+    <button class="button" id="cats">Add Image of Cat</button>
+	<h3 style="color:dimgray;">Interested? We are utilizing a TensorFlow model for this program. Interested in the code? Press control+shift+i to view it!</h3>
+	</center>
+  </body>
+</html>
