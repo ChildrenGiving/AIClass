@@ -78,8 +78,8 @@
 
             const classes = ['Dog', 'Neither', 'Cat'];
             document.getElementById('console').innerText = `
-              prediction: ${classes[result.label]}\n
-              probability: ${result.confidences[result.label]}
+              The AI Predicts it is a ${classes[result.label]}\n
+              The computer is ${100 * result.confidences[result.label]}% sure
             `;
 
             img.dispose();
