@@ -19,6 +19,10 @@
 			
 
 	}
+	
+	.button:hover {
+		background-color: #8B0000;
+	}
 	</style>
   </head>
   <body style="background-color:white;">
@@ -29,10 +33,11 @@
 	<h1 style="color:dimgray;">Welcome to the ChildrenGiving.org AI Simulation!</h1>
 	<h2></h2>
 	<h2 style="color:gray;">• To start, allow program camera access by clicking "Allow" when popup appears.</h2>
-	<h2 style="color:gray;">• To help the computer "learn", hold up at least 10 printed pictures of individual dogs, click on "Add Image of Dog" as you show each picture.</h2>
-	<h2 style="color:gray;">• Hold up at least 10 printed pictures of individual cats, click on "Add Image of Cat" as you show each picture.</h2>
-	<h2 style="color:gray;">• Hold up at least 10 printed pictures of miscellaneous items (like a house, person, or book), click on "Add Image of Neither" as you show each picture.</h2>
-    <div id="console"></div>
+	<h2 style="color:gray;">• To help the computer "learn", hold up at least 5 pictures of individual dogs, click on "Add Image of Dog" as you show each picture.</h2>
+	<h2 style="color:gray;">• Hold up at least 5 pictures of individual cats, click on "Add Image of Cat" as you show each picture.</h2>
+	<h2 style="color:gray;">• Hold up at least 5 pictures of miscellaneous items (like a house, person, or book), click on "Add Image of Neither" as you show each picture.</h2>
+    <h2 style="color:gray;">• Now you're ready for testing! Hold a dog or cat up and see what the computer says!</h2>
+	<div id="console"></div>
     <video autoplay playsinline muted id="webcam" width="224" height="224"></video>
     <script>
       const webcamElement = document.getElementById('webcam');
